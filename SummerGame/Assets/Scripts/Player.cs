@@ -27,9 +27,13 @@ public class Player : MonoBehaviour
 	void Update ()
     {
         float horizontal = Input.GetAxis("Horizontal");
+        
         isGrounded = IsGrounded();
+        HandleInput();
         HandleMovement(horizontal);
         Flip(horizontal);
+        
+        ResetValues();
 	}
 
     private void HandleMovement(float horizontal)
@@ -71,7 +75,7 @@ public class Player : MonoBehaviour
         {
             foreach (Transform point in groundPoints)
             {
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(point.position, groundPosition, whatIsGround);
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(point.position, groundRadius, whatIsGround);
 
                 for (int i = 0; i < colliders.Length; i++)
                 {
@@ -84,5 +88,10 @@ public class Player : MonoBehaviour
 
         }
         return false;
+    }
+
+    private void ResetValues()
+    {
+        jump = false;
     }
 }
