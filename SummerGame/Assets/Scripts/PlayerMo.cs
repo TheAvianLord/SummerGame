@@ -1,27 +1,27 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerMo : MonoBehaviour
 {
     private Rigidbody2D myRigidbody;
     public float speed;
     public bool facingRight;
 
-    // Use this for initialization
-    void Start ()
+	// Use this for initialization
+	void Start ()
     {
         facingRight = true;
         myRigidbody = GetComponent<Rigidbody2D>();
-    }
-    
-    // Update is called once per frame
-    void Update ()
+	}
+	
+	// Update is called once per frame
+	void Update ()
     {
         float horizontal = Input.GetAxis("Horizontal");
         HandleMovement(horizontal);
         Flip(horizontal);
-    }
+	}
 
     private void HandleMovement(float horizontal)
     {
