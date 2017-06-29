@@ -5,14 +5,22 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D myRigidbody;
+    private Animator myAnimator;
     public float speed;
     public bool facingRight;
+    public Transform[] groundPoints;
+    public float groundRadius;
+    public LayerMask whatIsGround;
+    public bool isGrounded;
+    public bool jump;
+    public float jumpForce;
 
     // Use this for initialization
     void Start ()
     {
         facingRight = true;
         myRigidbody = GetComponent<Rigidbody2D>();
+        myAnimator = GetComponent<Animator>();
     }
     
     // Update is called once per frame
@@ -26,11 +34,19 @@ public class Player : MonoBehaviour
         Flip(horizontal);
         
         ResetValues();
-	}
+    }
 
     private void HandleMovement(float horizontal)
     {
-        myRigidbody.velocity = new Vector2(horizontal * speed, myRigidbody.velocity.y); 
+        myRigidbody.velocity = new Vector2(horizontal * speed, myRigidbody.velocity.y);
+        myAnimator.SetFloat("speed", Mathf.Abs(horizontal));
+
+        if (isGrounded && jump)
+        {
+            isGrounded = false;
+            myRigidbody.AddForce(new Vector2(0, jumpForce));
+        }
+
     }
 
     private void Flip(float horizontal)
