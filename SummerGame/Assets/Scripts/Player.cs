@@ -19,9 +19,14 @@ public class Player : MonoBehaviour
     void Update ()
     {
         float horizontal = Input.GetAxis("Horizontal");
+        
+        isGrounded = IsGrounded();
+        HandleInput();
         HandleMovement(horizontal);
         Flip(horizontal);
-    }
+        
+        ResetValues();
+	}
 
     private void HandleMovement(float horizontal)
     {
@@ -38,5 +43,39 @@ public class Player : MonoBehaviour
             theScale.x *= -1;
             transform.localScale = theScale;
         }
+    }
+
+    private void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jump = true;
+        }
+    }
+
+    private bool IsGrounded()
+    {
+        if (myRigidbody.velocity.y <= 0)
+        {
+            foreach (Transform point in groundPoints)
+            {
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(point.position, groundRadius, whatIsGround);
+
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i].gameObject != gameObject)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+
+    private void ResetValues()
+    {
+        jump = false;
     }
 }
