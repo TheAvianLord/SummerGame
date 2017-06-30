@@ -5,21 +5,21 @@ using UnityEngine;
 public class rig : MonoBehaviour {
 
 	GameObject pObj;
+	Rigidbody2D thisBody;
+	Rigidbody2D pBody;
 
 	// Use this for initialization
 	void Start () {
 		pObj = GameObject.Find("Player");
 	}
-
-	//Vector2 pPos = new Vector3(pObj.transform.position.x, pObj.transform.position.y, 0.0F);
-	//Vector2 camPos = transform.position;
 	
 	// Update is called once per frame
 	void Update () {
-		this.transform.position = new Vector3(pObj.transform.position.x, pObj.transform.position.y, this.transform.position.z);
-		this.transform.localEulerAngles = pObj.transform.rotation.eulerAngles;
+
+		pBody = pObj.GetComponent<Rigidbody2D>();
+		thisBody = this.GetComponent<Rigidbody2D>();
+		Vector2 posDiff = pObj.transform.position - this.transform.position;
+		thisBody.velocity = posDiff;
+		//this.transform.localEulerAngles = pObj.transform.rotation.eulerAngles;
 	}
 }
-
-
-//Come up with a method that will move the camera ()
