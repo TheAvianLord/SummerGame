@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Rigidbody2D myRigidbody;
+    private Rigidbody myRigidbody;
     private Animator myAnimator;
     public float speed;
     public bool facingRight;
@@ -13,13 +13,15 @@ public class Player : MonoBehaviour
     public LayerMask whatIsGround;
     public bool isGrounded;
     public bool jump;
-    public float jumpForce;
+    public bool z_jump_up;
+    public bool z_jump_down;
 
 	// Use this for initialization
 	void Start ()
     {
+        Physics.gravity = new Vector3(0, -20F, 0);
         facingRight = true;
-        myRigidbody = GetComponent<Rigidbody2D>();
+        myRigidbody = GetComponent<Rigidbody>();
         myAnimator = GetComponent<Animator>();
 	}
 	
@@ -27,7 +29,6 @@ public class Player : MonoBehaviour
 	void Update ()
     {
         float horizontal = Input.GetAxis("Horizontal");
-        
         isGrounded = IsGrounded();
         HandleInput();
         HandleMovement(horizontal);
@@ -44,7 +45,19 @@ public class Player : MonoBehaviour
         if (isGrounded && jump)
         {
             isGrounded = false;
-            myRigidbody.AddForce(new Vector2(0, jumpForce));
+            myRigidbody.AddForce(new Vector3(0, 200, 0), ForceMode.Impulse);
+        }
+
+        if (isGrounded && z_jump_up && myRigidbody.position.z < 2.5)
+        {
+            isGrounded = false;
+            myRigidbody.AddForce(new Vector3(0, 200, 5000), ForceMode.Impulse);
+        }
+
+        if (isGrounded && z_jump_down && myRigidbody.position.z > 2.5)
+        {
+            isGrounded = false;
+            myRigidbody.AddForce(new Vector3(0, 200, -5000), ForceMode.Impulse);
         }
 
     }
@@ -67,6 +80,16 @@ public class Player : MonoBehaviour
         {
             jump = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            z_jump_up = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            z_jump_down = true;
+        }
     }
 
     private bool IsGrounded()
@@ -75,7 +98,7 @@ public class Player : MonoBehaviour
         {
             foreach (Transform point in groundPoints)
             {
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(point.position, groundRadius, whatIsGround);
+                Collider[] colliders = Physics.OverlapSphere(point.position, groundRadius, whatIsGround);
 
                 for (int i = 0; i < colliders.Length; i++)
                 {
@@ -93,5 +116,7 @@ public class Player : MonoBehaviour
     private void ResetValues()
     {
         jump = false;
+        z_jump_up = false;
+        z_jump_down = false;
     }
 }
