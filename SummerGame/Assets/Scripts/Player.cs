@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         HandleInput();
         HandleMovement(horizontal);
         Flip(horizontal);
+        HandleLayers();
         
         ResetValues();
 	}
@@ -42,10 +43,16 @@ public class Player : MonoBehaviour
         myRigidbody.velocity = new Vector2(horizontal * speed, myRigidbody.velocity.y);
         myAnimator.SetFloat("speed", Mathf.Abs(horizontal));
 
+        if (myRigidbody.velocity.y < 0)
+        {
+            myAnimator.SetBool("land", true);
+        }
+
         if (isGrounded && jump)
         {
             isGrounded = false;
             myRigidbody.AddForce(new Vector3(0, 200, 0), ForceMode.Impulse);
+            myAnimator.SetTrigger("jump");
         }
 
         if (isGrounded && z_jump_up && myRigidbody.position.z < 2.5)
@@ -104,6 +111,8 @@ public class Player : MonoBehaviour
                 {
                     if (colliders[i].gameObject != gameObject)
                     {
+                        myAnimator.ResetTrigger("jump");
+                        myAnimator.SetBool("land", false);
                         return true;
                     }
                 }
@@ -118,5 +127,18 @@ public class Player : MonoBehaviour
         jump = false;
         z_jump_up = false;
         z_jump_down = false;
+    }
+
+    private void HandleLayers()
+    {
+        if (!isGrounded)
+        {
+            myAnimator.SetLayerWeight(1, 1);
+        }
+
+        else
+        {
+            myAnimator.SetLayerWeight(1, 0);
+        }
     }
 }
