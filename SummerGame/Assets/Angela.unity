@@ -4293,7 +4293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f83fd1903e4cf85409e59b47b8a07d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 4
   facingRight: 0
   groundPoints:
   - {fileID: 1256386657}
@@ -4313,7 +4313,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1943500856}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 86c95b162f62cca49b8db3f9c0775059, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
